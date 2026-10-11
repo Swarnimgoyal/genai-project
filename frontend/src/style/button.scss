@@ -1,0 +1,38 @@
+a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.button{
+
+    border: none;
+    outline: none;
+    padding-inline: 1.5rem;
+    padding-block: 0.75rem;
+    border-radius: 1rem;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+
+    &.primary-button{
+        background-color: #e1034d;
+        color: white;
+    }
+
+    &.ghost-button{
+        background-color: transparent;
+        color: whitesmoke;
+        border: 1px solid #3a3a3a;
+    }
+
+    &:disabled{
+        cursor: wait;
+        opacity: 0.7;
+    }
+
+    &:active{
+        transform: scale(0.9);
+    }
+}
