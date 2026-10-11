@@ -36,11 +36,16 @@ function toGeminiSchema(schema) {
     return jsonSchema
 }
 
-const models = [ "gemini-flash-latest", "gemini-2.5-flash", "gemini-3-flash-preview" ]
+const models = [ "gemini-3.8-flash", "gemini-3-flash-preview" ]
 
 function isBusyError(err) {
     const message = String(err?.message || "")
     return err?.status === 503 || err?.status === 429 || /UNAVAILABLE|high demand|RESOURCE_EXHAUSTED/.test(message)
+}
+
+function isMissingModel(err) {
+    const message = String(err?.message || "")
+    return err?.status === 404 || /NOT_FOUND|no longer available|is not found/.test(message)
 }
 
 function wait(ms) {
@@ -79,6 +84,9 @@ async function generateStructured(prompt, schema) {
                 return parsed.data
             } catch (err) {
                 lastError = err
+                if (isMissingModel(err)) {
+                    break
+                }
                 if (err.code === "INVALID_AI_RESPONSE" || isBusyError(err)) {
                     await wait(700 * attempt)
                     continue
